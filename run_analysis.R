@@ -44,18 +44,20 @@ names(all_data) <- valid_names
 
 sel_data <- select(all_data, matches("subject|activity|\\.mean\\.|\\.std\\."))
 
+names(sel_data) <- gsub(names(sel_data), pattern = "\\.\\.", replacement = "")
+
 # Use descriptive activity names to name the activities in the selected data set
 
 sel_data$activity <- lActivities$V2[match(sel_data$activity, lActivities$V1)]
 
-write.csv(sel_data, file = "sel_data.csv", row.names = FALSE)
+write.table(sel_data, file = "sel_data.txt", row.names = FALSE)
 
 # From the previous data set, create a second independent tidy data set with the average
 # of each variable for each activity and each subject
 
 mean_data <- sel_data %>% group_by(subject, activity) %>% summarise_all(funs(mean))
 
-write.csv(mean_data, file = "mean_data.csv", row.names = FALSE)
+write.table(mean_data, file = "mean_data.txt", row.names = FALSE)
 
 # Re-initialize the Global Environment
 
